@@ -12,6 +12,7 @@ def startInfoChannel():
     #set music sites
     radioSiteMorning = "http://jzr-sunset.ice.infomaniak.ch/jzr-sunset.mp3?listening-from-radio-garden=1593559278551"
     radioSiteOvernight="https://radio.stereoscenic.com/asp-s?listening-from-radio-garden=1594126513986"
+    #only two right now, I'll add another one eventually
     radioSiteDay = radioSiteMorning
     
     currentHourInfoChannelDefault = datetime.datetime.today().hour
@@ -31,7 +32,7 @@ def startInfoChannel():
     #play default channel
     response = client.send(bytes("PLAY 1-10 [HTML] "+ defaultPage + " \r\n",encoding='utf8'))
 
-
+#function to update the up next flash graphic that plays, super crappy design but best I can do rn
 def updateUpNext(pathOriginal,pathInPlace, title,time):
     #update the title lower third with a next up card
     f = open(pathOriginal,'r') # open file with read permissions
@@ -49,6 +50,7 @@ def updateUpNext(pathOriginal,pathInPlace, title,time):
     f.write(filedata) # update it replacing the previous strings 
     f.close() # closes the file
 
+#get seconds from time
 def get_sec(time_str):
     #Gets seconds from time
     h, m, s = time_str.split(':')
@@ -58,6 +60,7 @@ def ceil_dt(dt, delta):
     #Rounds current time up by minute value - delta
     return dt + (datetime.datetime.min - dt) % delta
 
+#set client IP below and HTML page for info channel
 clientIP = "192.168.1.101"
 defaultPage = "http://192.168.3.9:8099"
 
@@ -68,10 +71,8 @@ radioSite = "https://www.jango.com/stations/113387000/tunein?"
 
 #start infochannel
 startInfoChannel()
-'''
-response = client.send(bytes("CALL 1-30 LOOP \r\n",encoding='utf8'))
-response = client.send(bytes("MIXER 1-30 VOLUME 0.9 \r\n",encoding='utf8'))
-'''
+
+#start infinite loop of checking for new programming and updating the TV server
 while True:
     currentWeekday = datetime.datetime.today().weekday()
     print(currentWeekday)
